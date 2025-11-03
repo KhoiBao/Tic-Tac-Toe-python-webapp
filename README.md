@@ -1,6 +1,6 @@
 ## Tac-Toe-python-webapp
 
-An final project of Artificial Intelligence App in Ho Chi Minh City of University and Trade (HUIT), represent the appliance of Minimax Algorithm in Tic-Tac-Toe Game totally created by Group 3, using Flask for Python Framework, with D3.js for visualize game tree though it is not completed yet.
+A final project of Artificial Intelligence in Ho Chi Minh City of University and Trade (HUIT), represent the appliance of Minimax Algorithm in Tic-Tac-Toe Game created by Group 3, using Flask (Python framework). [obv vibe-coded due to shortage of deadline]
 ----
 <img width="207" height="207" alt="image" src="https://github.com/user-attachments/assets/cdf0e826-4d3d-4743-bc66-260fbd6611bd" />
 
@@ -24,31 +24,29 @@ Dự án này tập trung vào việc cung cấp một trải nghiệm chơi gam
   * **Giao diện Người dùng Hiện đại (UI/UX):**
       * Hỗ trợ **Chế độ tối (Dark Mode)** và **Lưu cài đặt giao diện** bằng Local Storage.
       * Nhiều chủ đề màu sắc cho bàn cờ (Mặc định, Màu Gỗ, Mát mẻ, Màu Tối).
-      * Hiển thị **Trực quan hóa Cây Trò chơi (Game Tree Visualization)** (dùng D3.js) để phân tích chiến lược của AI.
 
 ## 💻 Công nghệ sử dụng
 
   * **Backend:** Python, Flask.
-  * **Logic Game:** Python (Class `CaroGame` trong `game_logic.py`).
   * **Frontend:** HTML5, CSS3, JavaScript (ES6+).
-  * **Thư viện:** Bootstrap 5, D3.js (cho visualization).
+  * **Thư viện:** Bootstrap 5.
   * **Quản lý trạng thái:** Flask Session.
 
 ## 📁 Cấu trúc Project
 
 ```
 /caro-game-project
-├── app.py              # Ứng dụng Flask: định tuyến, quản lý game session, xử lý HTTP requests
-├── game_logic.py       # Logic game cốt lõi, kiểm tra thắng/hòa, thuật toán AI (Minimax, Alpha-Beta Pruning)
+├── app.py              
+├── game_logic.py       
 ├── templates/
-│   └── index.html      # Giao diện chính: menu tùy chọn, bàn cờ, khu vực hiển thị Game Tree
+│   └── index.html      
 └── static/
     ├── css/
-    │   └── style.css   # CSS: định nghĩa biến màu sắc (Dark Mode, Board Themes) và style cho bàn cờ
+    │   └── style.css   
     ├── js/
-    │   └── script.js   # JavaScript: xử lý DOM, tương tác game, gọi API, hiển thị Game Tree (D3.js)
+    │   └── script.js   
     └── images/
-        └── ...         # Các tệp hình ảnh, icon
+        └── ...         
 ```
 
 ## 🚀 Cài đặt và Chạy ứng dụng
@@ -73,8 +71,7 @@ Dự án này tập trung vào việc cung cấp một trải nghiệm chơi gam
 
     Mở trình duyệt web của bạn và truy cập vào địa chỉ:
 
-    `http://127.0.0.1:5000/`
-    Sẽ có bản web trong tương lai!
+**COMING SOON**
 
 4. **Hình ảnh trong web:**
 
@@ -106,4 +103,3 @@ Dự án này tập trung vào việc cung cấp một trải nghiệm chơi gam
 3.  **Chơi Game:**
       * Ở chế độ PvC/PvP, nhấp vào ô trống để đi nước cờ.
       * Ở chế độ CvC, game sẽ tự động thực hiện các nước đi giữa hai AI.
-4.  **Phân tích AI:** Theo dõi khu vực **Game Tree Visualization** để xem cây quyết định của AI, các nước đi tốt nhất và các nhánh đã bị cắt tỉa (pruned).
