@@ -18,18 +18,13 @@ class CaroGame:
         self.ai_calculations = ""
         self.WIN_CONDITION = win
         
-        # Cache để lưu kết quả đánh giá
         self.eval_cache = {}
         
-        # Game tree data
-        self.game_tree_data = []
-        self.current_parent = None  # Track parent node for tree structure
-
     def make_move(self, r, c):
         if 0 <= r < self.size and 0 <= c < self.size and self.board[r][c] == '' and not self.winner:
             self.board[r][c] = self.current_player
             self.move_count += 1
-            self.eval_cache.clear()  # Xóa cache khi có nước đi mới
+            self.eval_cache.clear() 
             
             if self.check_win(self.current_player):
                 self.winner = self.current_player
@@ -75,16 +70,12 @@ class CaroGame:
         return False
 
     def get_smart_moves(self, max_moves=10):
-        """
-        Lấy các nước đi thông minh nhất dựa trên phân tích nhanh.
-        """
         if self.move_count == 0:
             return [(self.size // 2, self.size // 2)]
         
         move_scores = []
         center = self.size // 2
         
-        # Tìm tất cả ô trống gần quân cờ đã đánh (bán kính 2)
         occupied = set() 
         for r in range(self.size):
             for c in range(self.size):
@@ -102,43 +93,34 @@ class CaroGame:
         
         if not candidates:
             candidates = {(r, c) for r in range(self.size) for c in range(self.size) 
-                         if self.board[r][c] == ''}
+                          if self.board[r][c] == ''}
         
-        # Đánh giá nhanh từng ô
         for r, c in candidates:
             score = 0
             
-            # Ưu tiên vị trí gần tâm
             dist_to_center = abs(r - center) + abs(c - center)
             score -= dist_to_center * 2
             
-            # Đánh giá mức độ nguy hiểm/cơ hội của ô này
             for player in ['X', 'O']:
                 player_score = self._evaluate_position(r, c, player)
                 if player == self.current_player:
-                    score += player_score * 1.2  # Ưu tiên tấn công
+                    score += player_score * 1.2
                 else:
-                    score += player_score  # Phòng thủ
+                    score += player_score
             
             move_scores.append((score, (r, c)))
         
-        # Sắp xếp và lấy top moves
         move_scores.sort(reverse=True)
         return [move for _, move in move_scores[:max_moves]]
 
     def _evaluate_position(self, r, c, player):
-        """
-        Đánh giá nhanh giá trị của một vị trí cho một người chơi.
-        """
         score = 0
-        directions = [(0, 1), (1, 0), (1, 1), (1, -1)]  # Ngang, dọc, chéo
+        directions = [(0, 1), (1, 0), (1, 1), (1, -1)] 
         
         for dr, dc in directions:
-            # Đếm quân liên tiếp theo cả 2 hướng
             count = 1
             spaces = 0
             
-            # Hướng dương
             for i in range(1, 5):
                 nr, nc = r + dr * i, c + dc * i
                 if not (0 <= nr < self.size and 0 <= nc < self.size):
@@ -151,7 +133,6 @@ class CaroGame:
                 else:
                     break
             
-            # Hướng âm
             for i in range(1, 5):
                 nr, nc = r - dr * i, c - dc * i
                 if not (0 <= nr < self.size and 0 <= nc < self.size):
@@ -164,20 +145,18 @@ class CaroGame:
                 else:
                     break
             
-            # Tính điểm dựa trên số quân liên tiếp
             if count >= 4:
-                score += 10000  # Thắng hoặc chặn thắng
+                score += 10000
             elif count == 3 and spaces >= 1:
-                score += 1000   # 3 liên tiếp có thể mở rộng
+                score += 1000
             elif count == 2 and spaces >= 2:
-                score += 100    # 2 liên tiếp có tiềm năng
+                score += 100
             elif count == 1 and spaces >= 2:
                 score += 10
         
         return score
 
     def _evaluate_line(self, line, player, opp):
-        """Đánh giá một dòng 5 ô."""
         p_count = line.count(player)
         o_count = line.count(opp)
         empty = line.count('')
@@ -196,7 +175,6 @@ class CaroGame:
         return 0
 
     def evaluate_board(self, player):
-        """Đánh giá tổng thể bàn cờ với cache."""
         board_key = ''.join(''.join(row) for row in self.board) + player
         
         if board_key in self.eval_cache:
@@ -204,29 +182,23 @@ class CaroGame:
         
         score = 0
         opp = 'O' if player == 'X' else 'X'
-        win = self.WIN_CONDITION # Sử dụng WIN_CONDITION
+        win = self.WIN_CONDITION
 
-        # Ngang
         for r in range(self.size):
-            # Duyệt các vị trí bắt đầu
             for c in range(self.size - win + 1): 
-                # Lấy đường có độ dài = win
                 line = [self.board[r][c+i] for i in range(win)] 
                 score += self._evaluate_line(line, player, opp)
         
-        # Dọc
         for c in range(self.size):
             for r in range(self.size - win + 1):
                 line = [self.board[r+i][c] for i in range(win)]
                 score += self._evaluate_line(line, player, opp)
         
-        # Chéo xuống (từ trên trái xuống dưới phải)
         for r in range(self.size - win + 1):
             for c in range(self.size - win + 1):
                 line = [self.board[r+i][c+i] for i in range(win)]
                 score += self._evaluate_line(line, player, opp)
         
-        # Chéo lên (từ dưới trái lên trên phải)
         for r in range(win - 1, self.size):
             for c in range(self.size - win + 1):
                 line = [self.board[r-i][c+i] for i in range(win)]
@@ -238,26 +210,20 @@ class CaroGame:
     def minimax(self, depth, alpha, beta, is_max, ai_player, difficulty='normal'):
         opp_player = 'O' if ai_player == 'X' else 'X'
         
-        # Kiểm tra thắng/thua
         if self.check_win(opp_player):
             self.winner = None
             score = -100000 + depth
-            self._add_tree_node(None, score, depth, False)
             return score, None
         if self.check_win(ai_player):
             self.winner = None
             score = 100000 - depth
-            self._add_tree_node(None, score, depth, False)
             return score, None
         
-        # Điều kiện dừng
         if depth == 0:
             self.winner = None
             score = self.evaluate_board(ai_player) - self.evaluate_board(opp_player)
-            self._add_tree_node(None, score, depth, False)
             return score, None
         
-        # Lấy các nước đi thông minh
         if difficulty == 'hard':
             moves = self.get_smart_moves(max_moves=12)
         else:
@@ -280,18 +246,10 @@ class CaroGame:
                     best_score = score
                     best_move = (r, c)
                 
-                # Thêm vào game tree
-                is_best = (score == best_score and (r, c) == best_move)
-                pruned = False
-                
                 alpha = max(alpha, best_score)
                 if beta <= alpha:
-                    pruned = True
-                    self._add_tree_node((r, c), score, depth, pruned)
                     break
                     
-                self._add_tree_node((r, c), score, depth, pruned, is_best)
-                
             return best_score, best_move
         else:
             best_score = math.inf
@@ -304,34 +262,13 @@ class CaroGame:
                     best_score = score
                     best_move = (r, c)
                 
-                # Thêm vào game tree
-                is_best = (score == best_score and (r, c) == best_move)
-                pruned = False
-                
                 beta = min(beta, best_score)
                 if beta <= alpha:
-                    pruned = True
-                    self._add_tree_node((r, c), score, depth, pruned)
                     break
                     
-                self._add_tree_node((r, c), score, depth, pruned, is_best)
-                
             return best_score, best_move
 
-    def _add_tree_node(self, move, score, depth, pruned=False, is_best=False):
-        """Thêm một node vào game tree data"""
-        self.game_tree_data.append({
-            'move': move,
-            'score': score,
-            'depth': depth,
-            'pruned': pruned,
-            'is_best': is_best
-        })
-
     def find_best_move(self):
-        # Reset game tree data
-        self.game_tree_data = []
-        
         player = self.current_player
         difficulty = 'normal'
 
@@ -346,7 +283,6 @@ class CaroGame:
             self.ai_calculations = f"AI ({player}) đi nước đầu tiên (giữa)."
             return (self.size // 2, self.size // 2)
 
-        # Kiểm tra nước thắng ngay lập tức
         smart_moves = self.get_smart_moves(max_moves=20)
         for r, c in smart_moves:
             self.board[r][c] = player
@@ -358,7 +294,6 @@ class CaroGame:
             self.board[r][c] = ''
             self.winner = None
         
-        # Kiểm tra nước chặn
         opp = 'O' if player == 'X' else 'X'
         for r, c in smart_moves:
             self.board[r][c] = opp
