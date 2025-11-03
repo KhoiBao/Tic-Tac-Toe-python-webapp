@@ -1,0 +1,214 @@
+/* --- BIẾN MÀU SẮC (CSS VARIABLES) --- */
+
+/* :root là nơi định nghĩa biến toàn cục */
+
+/* 1. Chủ đề Giao diện (Light/Dark) */
+:root[data-bs-theme="light"] {
+    --bg-color: #f8f9fa;
+    --text-color: #212529;
+    --card-bg: #ffffff;
+    --card-border: rgba(0, 0, 0, 0.175);
+    --ai-calc-bg: #f1f1f1;
+    --ai-calc-text: #333;
+}
+
+:root[data-bs-theme="dark"] {
+    --bg-color: #212529;
+    --text-color: #f8f9fa;
+    --coord-cell-text: #212529;
+    --card-bg: #343a40;
+    --card-border: rgba(255, 255, 255, 0.125);
+    --ai-calc-bg: #1a1a1a;
+    --ai-calc-text: #eee;
+}
+
+/* 2. Chủ đề Bàn cờ */
+body[data-board-theme="default"] {
+    --board-bg: #ffffff;
+    --board-border: #333;
+    --cell-border: #ddd;
+    --cell-hover-bg: #f0f0f0;
+    --coord-cell-bg: #f9f9f9;
+    --coord-cell-bg: #f9f9f9;
+    --coord-cell-text: #343a40;
+}
+
+body[data-board-theme="wood"] {
+    --board-bg: #D2B48C; /* Màu gỗ (tan) */
+    --board-border: #8B4513; /* Nâu đậm */
+    --cell-border: #A0522D; /* Nâu (sienna) */
+    --cell-hover-bg: #C19A6B; /* Gỗ nhạt hơn */
+    --coord-cell-bg: #DEB887;  /* Gỗ sáng (burlywood) */
+    --coord-cell-bg: #DEB887;
+    --coord-cell-text: #343a40;
+}
+
+body[data-board-theme="blue"] {
+    --board-bg: #E6F7FF; /* Xanh rất nhạt */
+    --board-border: #0056b3; /* Xanh đậm */
+    --cell-border: #B0E0E6; /* Xanh (powderblue) */
+    --cell-hover-bg: #D4F1F4;
+    --coord-cell-bg: #F0F8FF; /* (aliceblue) */
+    --coord-cell-bg: #F0F8FF;
+    --coord-cell-text: #343a40;
+}
+
+body[data-board-theme="dark-board"] {
+    --board-bg: #2b2b2b; /* Nền bàn cờ (xám tối) */
+    --board-border: #888888; /* Viền (sáng) */
+    --cell-border: #555555; /* Viền ô */
+    --cell-hover-bg: #4a4a4a; /* Hover */
+    --coord-cell-bg: #333333; /* Nền tọa độ */
+    --coord-cell-text: #f0f0f0; /* Màu chữ tọa độ (sáng) */
+}
+
+
+/* --- ÁP DỤNG BIẾN --- */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.card {
+    background-color: var(--card-bg);
+    border-color: var(--card-border);
+}
+
+#ai-calculations {
+    background-color: var(--ai-calc-bg);
+    color: var(--ai-calc-text);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    min-height: 100px;
+}
+
+/* Ẩn/hiện chọn độ khó và ai đi trước */
+.difficulty-wrapper,
+.first-move-wrapper { 
+    display: none; 
+}
+
+
+/* --- CẤU TRÚC BÀN CỜ VỚI TỌA ĐỘ (MỚI) --- */
+
+#game-wrapper {
+    display: grid;
+    /* Định nghĩa 2 cột (Tọa độ Y, Bàn cờ) và 2 hàng (Tọa độ X, Bàn cờ) */
+    grid-template-columns: 30px 1fr; /* Cột 1 rộng 30px, cột 2 co giãn */
+    grid-template-rows: 30px 1fr; /* Hàng 1 cao 30px, hàng 2 co giãn */
+    
+    /* Đảm bảo bàn cờ luôn vuông */
+    max-width: 600px;
+    aspect-ratio: 1 / 1;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Các ô tọa độ (A, B, C...) */
+.coord-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+    background-color: var(--coord-cell-bg);
+    color: var(--coord-cell-text);
+}
+
+/* Hàng trên (A, B, C...) */
+#row-coords {
+    grid-column: 2 / 3; /* Nằm ở cột 2 */
+    grid-row: 1 / 2;    /* Nằm ở hàng 1 */
+    display: grid; /* Cũng là 1 grid */
+    border-left: 1px solid var(--cell-border);
+}
+
+/* Cột bên trái (1, 2, 3...) */
+#col-coords {
+    grid-column: 1 / 2; /* Nằm ở cột 1 */
+    grid-row: 2 / 3;    /* Nằm ở hàng 2 */
+    display: grid; /* Cũng là 1 grid */
+    border-top: 1px solid var(--cell-border);
+}
+
+/* Ô góc trống */
+#corner-cell {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    background-color: var(--coord-cell-bg);
+}
+
+/* Bàn cờ chính */
+#board-container {
+    grid-column: 2 / 3; /* Cột 2 */
+    grid-row: 2 / 3;    /* Hàng 2 */
+    display: grid;
+    border: 2px solid var(--board-border);
+    background-color: var(--board-bg);
+}
+
+.cell {
+    border: 1px solid var(--cell-border);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5vw;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cell:hover {
+    background-color: var(--cell-hover-bg);
+}
+
+@media (min-width: 600px) {
+    .cell {
+        font-size: 1rem;
+    }
+}
+
+.cell.X { color: #0d6efd; }
+.cell.O { color: #dc3545; }
+
+
+/* --- HIỆU ỨNG NƯỚC ĐI VÀ THẮNG --- */
+
+/* Nước đi vừa đánh */
+.cell.last-move {
+    background-color: #e6f7ff;
+    border: 2px solid #0d6efd;
+    box-shadow: 0 0 8px rgba(13, 110, 253, 0.5);
+    position: relative;
+    z-index: 1;
+}
+
+/* Đường thắng */
+.cell.winning-cell {
+    background-color: #ffc107;
+    border-color: #ff9800;
+    transform: scale(1.1);
+    animation: pulse 0.6s infinite alternate;
+    z-index: 2;
+}
+.node circle:hover {
+  fill: #90caf9;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.link {
+  stroke: #bbb;
+}
+
+#game-tree-svg {
+  background-color: #fafafa;
+  user-select: none;
+}
+
+
+
+@keyframes pulse {
+    from { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7); }
+    to { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(255, 193, 7, 0); }
+}
