@@ -1,6 +1,6 @@
 ## Tac-Toe-python-webapp
 
-An final project of Artificial Intelligence App in Ho Chi Minh City of University and Trade (HUIT), represent the appliance of Minimax Algorithm in Tic-Tac-Toe Game totally created by Group 3, using Flask for Python Framework, with D3.js for visualize game tree though it is not compeleted yet.
+An final project of Artificial Intelligence App in Ho Chi Minh City of University and Trade (HUIT), represent the appliance of Minimax Algorithm in Tic-Tac-Toe Game totally created by Group 3, using Flask for Python Framework, with D3.js for visualize game tree though it is not completed yet.
 ----
 <img width="207" height="207" alt="image" src="https://github.com/user-attachments/assets/cdf0e826-4d3d-4743-bc66-260fbd6611bd" />
 
